@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    /* Custom Scrollbar untuk tampilan modern */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(52, 211, 153, 0.3);
+        /* Emerald with opacity */
+        border-radius: 4px;
+        transition: background 0.3s ease;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(52, 211, 153, 0.6);
+    }
+
+    body {
+        @apply bg-[#0f1115] text-white overflow-hidden;
+        /* Background grid subtle pattern */
+        background-image: radial-gradient(rgba(52, 211, 153, 0.05) 1px, transparent 1px);
+        background-size: 30px 30px;
+    }
+}
+
+@layer components {
+
+    /* Glassmorphism Panel */
+    .glass-panel {
+        @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl rounded-xl;
+    }
+
+    .glass-panel-dark {
+        @apply bg-black/30 backdrop-blur-md border border-white/5 shadow-2xl rounded-xl;
+    }
+
+    /* Neon Glow Text */
+    .text-neon {
+        text-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+    }
+}
