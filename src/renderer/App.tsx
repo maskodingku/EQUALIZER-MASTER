@@ -10,7 +10,7 @@ import { PathSelectionModal } from './components/Setup/PathSelectionModal'
 import { Power, Save, FolderOpen, RefreshCcw, HelpCircle, CheckCircle2, AlertCircle, Loader2, FileCog, Settings } from 'lucide-react'
 
 function App() {
-    const { bassBoost, subwooferGain, volume, preampGain, isBypass, setBassBoost, setSubwooferGain, setVolume, setPreampGain, toggleBypass, resetFlat, syncStatus, configPath, promptConfigSelection } = useAudioStore()
+    const { bassBoost, subwooferGain, volume, preampGain, vocalGain, trebleGain, midGain, loudnessGain, isBypass, setBassBoost, setSubwooferGain, setVolume, setPreampGain, setVocalGain, setTrebleGain, setMidGain, setLoudnessGain, toggleBypass, resetFlat, syncStatus, configPath, promptConfigSelection } = useAudioStore()
 
     const [modalType, setModalType] = useState<'save' | 'load' | null>(null)
     const [showHelp, setShowHelp] = useState(false)
@@ -136,6 +136,7 @@ function App() {
                     <div className="w-full h-px bg-white/5" />
 
                     {/* Volume Knob */}
+                    {/* Volume & Preamp */}
                     <div className="flex flex-col items-center gap-4">
                         <button
                             onClick={toggleBypass}
@@ -147,14 +148,14 @@ function App() {
                             {isBypass ? 'BYPASS ACTIVE' : 'BYPASS'}
                         </button>
 
-                        <Knob
-                            label="VOLUME"
-                            value={volume}
-                            onChange={setVolume}
-                            size={90}
-                            max={100}
-                        />
-                        <div className="flex flex-col items-center gap-2">
+                        <div className="flex flex-row items-center justify-center gap-2">
+                            <Knob
+                                label="VOLUME"
+                                value={volume}
+                                onChange={setVolume}
+                                size={80}
+                                max={100}
+                            />
                             <Knob
                                 label="PREAMP"
                                 value={preampGain}
@@ -167,19 +168,58 @@ function App() {
 
                     <div className="w-full h-px bg-white/5" />
 
-                    {/* Bass & Sub */}
-                    <div className="flex flex-col items-center gap-6">
+                    {/* Vocal & Loudness */}
+                    <div className="flex flex-row items-center justify-between gap-2 px-1 mt-4 mb-2">
                         <Knob
-                            label="BASS BOOST"
-                            value={bassBoost}
-                            onChange={setBassBoost}
-                            size={70}
+                            label="VOCAL"
+                            value={vocalGain || 0}
+                            onChange={setVocalGain}
+                            size={60}
+                            max={100}
                         />
                         <Knob
-                            label="SUBWOOFER"
+                            label="LOUD"
+                            value={loudnessGain || 0}
+                            onChange={setLoudnessGain}
+                            size={60}
+                            max={100}
+                        />
+                    </div>
+
+                    {/* Mid & High */}
+                    <div className="flex flex-row items-center justify-between gap-2 px-1 mb-2">
+                        <Knob
+                            label="MID"
+                            value={midGain || 0}
+                            onChange={setMidGain}
+                            size={60}
+                            max={100}
+                        />
+                        <Knob
+                            label="HIGH"
+                            value={trebleGain || 0}
+                            onChange={setTrebleGain}
+                            size={60}
+                            max={100}
+                        />
+                    </div>
+
+                    {/* Bass & Sub */}
+                    {/* Bass & Sub - Side by Side */}
+                    <div className="flex flex-row items-center justify-between gap-2 px-1">
+                        <Knob
+                            label="BASS"
+                            value={bassBoost}
+                            onChange={setBassBoost}
+                            size={60}
+                            max={100}
+                        />
+                        <Knob
+                            label="SUB"
                             value={subwooferGain}
                             onChange={setSubwooferGain}
-                            size={70}
+                            size={60}
+                            max={100}
                         />
                     </div>
 

@@ -83,7 +83,8 @@ export function PresetModal({ type, isOpen, onClose }: PresetModalProps) {
                             placeholder="Enter preset name..."
                             value={presetName}
                             onChange={(e) => setPresetName(e.target.value)}
-                            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500"
+                            className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-emerald-500 cursor-text"
+                            style={{ WebkitAppRegion: 'no-drag' } as any}
                             autoFocus
                         />
                         <button
@@ -99,30 +100,29 @@ export function PresetModal({ type, isOpen, onClose }: PresetModalProps) {
                             <div className="text-center text-slate-500 py-8">No presets found.</div>
                         ) : (
                             presets.map((p, idx) => (
-                                presets.map((p, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="w-full flex justify-between items-center bg-white/5 hover:bg-white/10 p-3 rounded-lg border border-transparent hover:border-blue-500/30 transition-all group"
+                                <div
+                                    key={idx}
+                                    className="w-full flex justify-between items-center bg-white/5 hover:bg-white/10 p-3 rounded-lg border border-transparent hover:border-blue-500/30 transition-all group"
+                                >
+                                    <button
+                                        onClick={() => handleLoad(p)}
+                                        className="flex-1 text-left"
                                     >
-                                        <button
-                                            onClick={() => handleLoad(p)}
-                                            className="flex-1 text-left"
-                                        >
-                                            <div className="font-bold text-white group-hover:text-blue-400">{p.name}</div>
-                                            <div className="text-[10px] text-slate-500">
-                                                Bass: {Math.round(p.bassBoost)}% • Sub: {Math.round(p.subwooferGain)}%
-                                            </div>
-                                        </button>
-                                        <button
-                                            onClick={(e) => handleDelete(e, p.name)}
-                                            className="p-2 text-slate-500 hover:text-red-500 transition-colors"
-                                            title="Delete Preset"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
-                                ))
+                                        <div className="font-bold text-white group-hover:text-blue-400">{p.name}</div>
+                                        <div className="text-[10px] text-slate-500">
+                                            Bass: {Math.round(p.bassBoost)}% • Sub: {Math.round(p.subwooferGain)}%
+                                        </div>
+                                    </button>
+                                    <button
+                                        onClick={(e) => handleDelete(e, p.name)}
+                                        className="p-2 text-slate-500 hover:text-red-500 transition-colors"
+                                        title="Delete Preset"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
                             ))
+
                         )}
                     </div>
                 )}

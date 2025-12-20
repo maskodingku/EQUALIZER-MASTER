@@ -36,6 +36,17 @@ export function FrequencyBars() {
                         <option value="Dangdut">🪘 Dangdut</option>
                         <option value="Jazz">🎷 Jazz</option>
                         <option value="Classical">🎻 Classical</option>
+                        <option value="separator" disabled>──────────</option>
+                        <option value="Acoustic">🎹 Acoustic</option>
+                        <option value="Electronic">⚡ Electronic</option>
+                        <option value="Hip-Hop">🧢 Hip-Hop</option>
+                        <option value="Bass Booster">🔊 Bass Booster</option>
+                        <option value="Bass Reducer">📉 Bass Reducer</option>
+                        <option value="Loudness">📢 Loudness</option>
+                        <option value="Vocal Booster">🗣️ Vocal Booster</option>
+                        <option value="Spoken Word">🎙️ Spoken Word</option>
+                        <option value="Gaming">🎮 Gaming</option>
+                        <option value="Cinema">🍿 Cinema</option>
                     </select>
                 </div>
 

@@ -40,10 +40,16 @@ if (!gotTheLock) {
 }
 
 function createTray() {
-    const iconPath = path.join(process.env.VITE_PUBLIC || '', 'icon.png') // Use icon.png
-    // In production, use a proper .ico file for Windows
-    const icon = nativeImage.createFromPath(iconPath)
+    let iconPath = path.join(__dirname, '../build/icon.png');
+    if (app.isPackaged) {
+        // In production, 'build' might be at root of resources/app or similar
+        iconPath = path.join(process.resourcesPath, 'app/build/icon.png');
+        // Fallback or better location logic needed? 
+        // If we include "build" in "files", it will be in resources/app/build.
+        iconPath = path.join(__dirname, '../build/icon.png'); // valid for asar?
+    }
 
+    const icon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
     tray = new Tray(icon)
 
     const contextMenu = Menu.buildFromTemplate([
@@ -83,6 +89,14 @@ function createWindow() {
         // Hide menu bar by default for cleaner look
         autoHideMenuBar: true
     })
+
+    // Handle external links (window.open)
+    win.webContents.setWindowOpenHandler(({ url }) => {
+        if (url.startsWith('https:') || url.startsWith('http:')) {
+            require('electron').shell.openExternal(url);
+        }
+        return { action: 'deny' };
+    });
 
     // Test active push message to Renderer-process.
     win.webContents.on('did-finish-load', () => {

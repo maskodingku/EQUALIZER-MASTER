@@ -1,6 +1,6 @@
 {
   "name": "equalizer-master",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Equalizer Master - Advanced System Audio Equalizer",
   "main": "dist-electron/main.js",
   "build": {
@@ -10,7 +10,8 @@
     "files": [
       "dist",
       "dist-electron",
-      "package.json"
+      "package.json",
+      "build"
     ],
     "win": {
       "target": [

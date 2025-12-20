@@ -4,6 +4,10 @@ export interface AudioData {
     subwooferGain: number;
     volume: number;
     preampGain: number;
+    vocalGain: number;
+    trebleGain: number;
+    midGain: number;
+    loudnessGain: number;
     isBypass?: boolean;
 }
 
@@ -58,6 +62,39 @@ export function generateAPOConfig(data: AudioData): string {
         const subGain = (data.subwooferGain / 100) * 15;
         lines.push(`# Subwoofer Boost`);
         lines.push(`${p}Filter: ON PK Fc 50 Hz Gain ${subGain.toFixed(1)} dB Q 2.0`);
+        lines.push(``);
+    }
+
+    // 4. Vocal Presence (Peaking 2.5kHz)
+    if (data.vocalGain > 0) {
+        const vGain = (data.vocalGain / 100) * 10;
+        lines.push(`# Vocal Presence`);
+        lines.push(`${p}Filter: ON PK Fc 2500 Hz Gain ${vGain.toFixed(1)} dB Q 1.4`);
+        lines.push(``);
+    }
+
+    // 5. Treble Air (High Shelf 8kHz)
+    if (data.trebleGain > 0) {
+        const tGain = (data.trebleGain / 100) * 12;
+        lines.push(`# Treble Air`);
+        lines.push(`${p}Filter: ON HS Fc 8000 Hz Gain ${tGain.toFixed(1)} dB Q 1.0`);
+        lines.push(``);
+    }
+
+    // 6. Mid Boost (Peaking 1kHz)
+    if (data.midGain > 0) {
+        const mGain = (data.midGain / 100) * 10;
+        lines.push(`# Mid Boost`);
+        lines.push(`${p}Filter: ON PK Fc 1000 Hz Gain ${mGain.toFixed(1)} dB Q 1.0`);
+        lines.push(``);
+    }
+
+    // 7. Loudness (Smile Curve: Lows + Highs)
+    if (data.loudnessGain > 0) {
+        const lGain = (data.loudnessGain / 100) * 10;
+        lines.push(`# Loudness (Contour)`);
+        lines.push(`${p}Filter: ON LS Fc 100 Hz Gain ${lGain.toFixed(1)} dB Q 0.7`);
+        lines.push(`${p}Filter: ON HS Fc 8000 Hz Gain ${(lGain * 0.8).toFixed(1)} dB Q 0.7`);
         lines.push(``);
     }
 

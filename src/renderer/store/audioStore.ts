@@ -12,6 +12,10 @@ interface AudioState {
     subwooferGain: number; // 0-100%
     volume: number; // 0-100%
     preampGain: number; // 0-100% (Control Preamp Boost)
+    vocalGain: number; // 0-100%
+    trebleGain: number; // 0-100%
+    midGain: number; // 0-100%
+    loudnessGain: number; // 0-100%
     isBypass: boolean;
     _bypassSnapshot: { // Internal snapshot
         bands: EqualizerBand[];
@@ -26,6 +30,10 @@ interface AudioState {
     setSubwooferGain: (val: number) => void;
     setVolume: (val: number) => void;
     setPreampGain: (val: number) => void;
+    setVocalGain: (val: number) => void;
+    setTrebleGain: (val: number) => void;
+    setMidGain: (val: number) => void;
+    setLoudnessGain: (val: number) => void;
     toggleBypass: () => void;
     resetFlat: () => void;
     loadPreset: (preset: any) => void;
@@ -87,6 +95,10 @@ export const useAudioStore = create<AudioState>((set) => ({
     subwooferGain: 50,
     volume: 80,
     preampGain: 50, // Default Center (0dB if mapped -12 to +12)
+    vocalGain: 0,
+    trebleGain: 0,
+    midGain: 0,
+    loudnessGain: 0,
     isBypass: false,
     _bypassSnapshot: null,
 
@@ -96,6 +108,10 @@ export const useAudioStore = create<AudioState>((set) => ({
     setBassBoost: (val) => set({ bassBoost: val }),
     setSubwooferGain: (val) => set({ subwooferGain: val }),
     setPreampGain: (val) => set({ preampGain: val }),
+    setVocalGain: (val) => set({ vocalGain: val }),
+    setTrebleGain: (val) => set({ trebleGain: val }),
+    setMidGain: (val) => set({ midGain: val }),
+    setLoudnessGain: (val) => set({ loudnessGain: val }),
     setVolume: (val) => set({ volume: val }), // Volume always adjustable
 
     toggleBypass: () => set((state) => ({ isBypass: !state.isBypass })),
@@ -109,6 +125,10 @@ export const useAudioStore = create<AudioState>((set) => ({
         // Let's fix resetFlat to actual 0 (Flat).
         volume: 80,
         preampGain: 50,
+        vocalGain: 0,
+        trebleGain: 0,
+        midGain: 0,
+        loudnessGain: 0,
         isBypass: false,
     }),
     loadPreset: (preset) => set({
@@ -191,6 +211,67 @@ export const useAudioStore = create<AudioState>((set) => ({
                     { f: 5000, g: 1 }, { f: 15000, g: -1 }
                 ];
                 break;
+            // --- NEW PRESETS ---
+            case 'Acoustic':
+                points = [
+                    { f: 50, g: 1 }, { f: 200, g: 2 }, { f: 1000, g: 3 },
+                    { f: 4000, g: 4 }, { f: 10000, g: 2 }
+                ];
+                break;
+            case 'Bass Booster':
+                points = [
+                    { f: 30, g: 6 }, { f: 60, g: 9 }, { f: 100, g: 6 },
+                    { f: 250, g: 2 }, { f: 500, g: 0 }
+                ];
+                break;
+            case 'Bass Reducer':
+                points = [
+                    { f: 30, g: -8 }, { f: 80, g: -5 }, { f: 200, g: -2 },
+                    { f: 500, g: 0 }
+                ];
+                break;
+            case 'Electronic':
+                points = [
+                    { f: 30, g: 5 }, { f: 80, g: 6 }, { f: 200, g: 1 },
+                    { f: 1000, g: -2 }, { f: 5000, g: 3 }, { f: 12000, g: 5 }
+                ];
+                break;
+            case 'Hip-Hop':
+                points = [
+                    { f: 40, g: 7 }, { f: 80, g: 5 }, { f: 250, g: 1 },
+                    { f: 1000, g: -2 }, { f: 4000, g: 2 }, { f: 10000, g: 3 }
+                ];
+                break;
+            case 'Spoken Word':
+                points = [
+                    { f: 60, g: -6 }, { f: 200, g: -2 }, { f: 500, g: 2 },
+                    { f: 1000, g: 4 }, { f: 3000, g: 4 }, { f: 8000, g: -2 }
+                ];
+                break;
+            case 'Loudness':
+                points = [
+                    { f: 30, g: 7 }, { f: 100, g: 4 }, { f: 500, g: -2 },
+                    { f: 2000, g: 0 }, { f: 8000, g: 5 }, { f: 16000, g: 8 }
+                ];
+                break;
+            case 'Vocal Booster':
+                points = [
+                    { f: 200, g: -3 }, { f: 500, g: 2 }, { f: 1000, g: 5 },
+                    { f: 3000, g: 5 }, { f: 8000, g: 2 }
+                ];
+                break;
+            case 'Gaming':
+                points = [
+                    { f: 40, g: 5 }, { f: 100, g: 3 }, { f: 500, g: -3 },
+                    { f: 2000, g: 4 }, { f: 6000, g: 6 }, { f: 12000, g: 5 }
+                ];
+                break;
+            case 'Cinema':
+                points = [
+                    { f: 30, g: 5 }, { f: 80, g: 4 }, { f: 300, g: -2 },
+                    { f: 1000, g: 0 }, { f: 5000, g: 3 }, { f: 12000, g: 6 }
+                ];
+                break;
             case 'Flat':
             default:
                 points = [{ f: 0, g: 0 }, { f: 20000, g: 0 }];
@@ -262,6 +343,10 @@ const debouncedSave = debounce((state: AudioState) => {
             subwooferGain: state.subwooferGain,
             volume: state.volume,
             preampGain: state.preampGain,
+            vocalGain: state.vocalGain,
+            trebleGain: state.trebleGain,
+            midGain: state.midGain,
+            loudnessGain: state.loudnessGain,
             isBypass: state.isBypass
         });
 
@@ -272,6 +357,10 @@ const debouncedSave = debounce((state: AudioState) => {
             subwooferGain: state.subwooferGain,
             volume: state.volume,
             preampGain: state.preampGain,
+            vocalGain: state.vocalGain,
+            trebleGain: state.trebleGain,
+            midGain: state.midGain,
+            loudnessGain: state.loudnessGain,
             isBypass: state.isBypass
         });
     }
@@ -291,6 +380,10 @@ useAudioStore.subscribe((state, prevState) => {
         state.subwooferGain !== prevState.subwooferGain ||
         state.volume !== prevState.volume ||
         state.preampGain !== prevState.preampGain ||
+        state.vocalGain !== prevState.vocalGain ||
+        state.trebleGain !== prevState.trebleGain ||
+        state.midGain !== prevState.midGain ||
+        state.loudnessGain !== prevState.loudnessGain ||
         state.isBypass !== prevState.isBypass
     );
 
@@ -312,7 +405,11 @@ if (window.ipcRenderer) {
                 bassBoost: savedState.bassBoost || 0,
                 subwooferGain: savedState.subwooferGain || 50,
                 volume: savedState.volume || 80,
-                preampGain: savedState.preampGain || 50
+                preampGain: savedState.preampGain || 50,
+                vocalGain: savedState.vocalGain || 0,
+                trebleGain: savedState.trebleGain || 0,
+                midGain: savedState.midGain || 0,
+                loudnessGain: savedState.loudnessGain || 0
             });
             // Force first sync immediately
             window.ipcRenderer.updateLiveEQ(savedState);

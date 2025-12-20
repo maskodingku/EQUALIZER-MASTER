@@ -100,3 +100,18 @@ npm run build
 
 Open Source. Feel free to fork, modify, and distribute.
 Created by **Maskoding**.
+
+---
+
+## 📦 Release Notes (v1.2.0)
+
+**New Pro Audio Controls**
+-   **🎤 VOCAL**: Targeted presence boost (2.5kHz) to bring vocals forward.
+-   **🎸 MID**: Enhance body and thickness (1kHz) for instruments.
+-   **✨ HIGH**: Add air and sparkle (8kHz+) for crystal clear details.
+-   **🔊 LOUDNESS (LOUD)**: "Smile Curve" contour (Low+High Boost) for powerful dynamic sound at any volume.
+
+**Enhancements**
+-   **🎛️ New Layout**: Compact side-by-side knob arrangement for better usability.
+-   **💾 New Presets**: Added 10+ new professional genres (Acoustic, Gaming, Cinema, Bass Booster, etc.).
+-   **🐛 Fixes**: Resolved duplicate preset bugs and config synchronization issues.
